@@ -7,3 +7,5 @@ other counters seem to be OK
 * Some minor fixes needed (Makefile) to be less kludgy, some more #if FreeBSDVersion < X defines around blocks so it can be 
 freely compiled between 10.x and 11.x
 
+Installation/make instruction as per Mellanox User Manual for FreeBSD OFED drivers
+
