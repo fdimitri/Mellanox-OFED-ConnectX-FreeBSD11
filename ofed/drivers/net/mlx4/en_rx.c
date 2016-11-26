@@ -31,6 +31,7 @@
  *
  */
 #include "opt_inet.h"
+#include "listhead.h"
 #include <linux/mlx4/cq.h>
 #include <linux/slab.h>
 #include <linux/mlx4/qp.h>
@@ -604,7 +605,7 @@ int mlx4_en_process_rx_cq(struct net_device *dev, struct mlx4_en_cq *cq, int bud
 		}
 
 		mb->m_pkthdr.flowid = cq->ring;
-		mb->m_flags |= M_FLOWID;
+//		mb->m_flags |= M_FLOWID;
 		mb->m_pkthdr.rcvif = dev;
 		if (be32_to_cpu(cqe->vlan_my_qpn) &
 		    MLX4_CQE_VLAN_PRESENT_MASK) {
@@ -654,8 +655,8 @@ next:
 	/* Flush all pending IP reassembly sessions */
 out:
 #ifdef INET
-	while ((queued = SLIST_FIRST(&ring->lro.lro_active)) != NULL) {
-		SLIST_REMOVE_HEAD(&ring->lro.lro_active, next);
+	while ((queued = LIST_FIRST(&ring->lro.lro_active)) != NULL) {
+		LIST_REMOVE_HEAD(&ring->lro.lro_active, next);
 		tcp_lro_flush(&ring->lro, queued);
 	}
 #endif

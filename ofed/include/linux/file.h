@@ -48,8 +48,7 @@ linux_fget(unsigned int fd)
 {
 	struct file *file;
 
-	if (fget_unlocked(curthread->td_proc->p_fd, fd, NULL, 0, &file,
-	    NULL) != 0) {
+	if (fget_unlocked(curthread->td_proc->p_fd, fd, NULL, &file, NULL) != 0) {
 		return (NULL);
 	}
 	return (struct linux_file *)file->f_data;
@@ -73,8 +72,7 @@ put_unused_fd(unsigned int fd)
 {
 	struct file *file;
 
-	if (fget_unlocked(curthread->td_proc->p_fd, fd, NULL, 0, &file,
-	    NULL) != 0) {
+	if (fget_unlocked(curthread->td_proc->p_fd, fd, NULL, &file, NULL) != 0) {
 		return;
 	}
 	/*
@@ -82,7 +80,7 @@ put_unused_fd(unsigned int fd)
 	 * installed, so no need to free the associated Linux file
 	 * structure.
 	 */
-	fdclose(curthread->td_proc->p_fd, file, fd, curthread);
+	fdclose(curthread, file, fd);
 
 	/* drop extra reference */
 	fdrop(file, curthread);
@@ -93,8 +91,7 @@ fd_install(unsigned int fd, struct linux_file *filp)
 {
 	struct file *file;
 
-	if (fget_unlocked(curthread->td_proc->p_fd, fd, NULL, 0, &file,
-	    NULL) != 0) {
+	if (fget_unlocked(curthread->td_proc->p_fd, fd, NULL, &file, NULL) != 0) {
 		file = NULL;
 	}
 	filp->_file = file;

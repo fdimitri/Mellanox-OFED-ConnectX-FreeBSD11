@@ -56,6 +56,11 @@
 
 #include <netinet/in.h>
 #include <netinet/in_pcb.h>
+#include <netinet/tcp.h>
+#include <netinet/tcp_lro.h>
+#include <netinet/udp.h>
+#include <net/ethernet.h>
+#include <sys/buf_ring.h>
 
 #include <netinet6/in6_var.h>
 #include <netinet6/nd6.h>

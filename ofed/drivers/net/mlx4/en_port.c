@@ -137,8 +137,9 @@ int mlx4_en_DUMP_ETH_STATS(struct mlx4_en_dev *mdev, u8 port, u8 reset)
 	int do_if_stat = 1;
 	unsigned long period = (unsigned long) (jiffies - priv->last_ifq_jiffies);
 	struct mlx4_en_vport_stats tmp_vport_stats;
+#if (__FreeBSD_version < 1100000)
         struct net_device *dev;
-
+#endif
 	if (jiffies_to_msecs(period) < EN_IFQ_MIN_INTERVAL ||
 				priv->counter_index == 0xff)
 		do_if_stat = 0;
@@ -550,6 +551,7 @@ int mlx4_en_DUMP_ETH_STATS(struct mlx4_en_dev *mdev, u8 port, u8 reset)
 		vport_stats->tx_errors = tmp_vport_stats.tx_errors;
 	}
 
+#if (__FreeBSD_version < 1100000)
 	if (!mlx4_is_mfunc(mdev->dev)) {
 		/* netdevice stats format */
                 dev                     = mdev->pndev[port];
@@ -563,7 +565,7 @@ int mlx4_en_DUMP_ETH_STATS(struct mlx4_en_dev *mdev, u8 port, u8 reset)
                 dev->if_omcasts         = priv->pkstats.tx_multicast_packets;
                 dev->if_collisions      = 0;
 	}
-
+#endif
 	spin_unlock(&priv->stats_lock);
 
 out:

@@ -1669,7 +1669,8 @@ mlx4_en_transmit(struct ifnet *dev, struct mbuf *m)
 	}
 	else
 #endif
-	if ((m->m_flags & (M_FLOWID | M_VLANTAG)) == M_FLOWID) {
+//	if ((m->m_flags & (M_FLOWID | M_VLANTAG)) == M_FLOWID) {
+	if (M_HASHTYPE_GET(m) != M_HASHTYPE_NONE) {
 		i = m->m_pkthdr.flowid % (priv->tx_ring_num - 1);
 	}
 	else {

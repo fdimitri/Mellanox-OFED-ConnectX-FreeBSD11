@@ -67,12 +67,8 @@ MALLOC_DEFINE(M_KMALLOC, "linux", "Linux kmalloc compat");
 #undef file
 #undef cdev
 #define	RB_ROOT(head)	(head)->rbh_root
-#undef LIST_HEAD
-/* From sys/queue.h */
-#define LIST_HEAD(name, type)						\
-struct name {								\
-	struct type *lh_first;	/* first element */			\
-}
+#include "listhead.h"
+
 
 struct kobject class_root;
 struct device linux_rootdev;
